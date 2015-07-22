@@ -1,0 +1,9 @@
+body { padding-top: 70px; }
+
+input:required:invalid, input:focus:invalid {
+    border-color: #ec971f;
+}
+
+input:required:valid {
+    border-color: #008800;
+}
