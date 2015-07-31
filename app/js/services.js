@@ -34,6 +34,7 @@
             response: function (response) {
                 if (response != null && response.status == 200 && $window.sessionStorage.token && !AuthenticationService.isAuthenticated) {
                     AuthenticationService.isAuthenticated = true;
+                    AuthenticationService.isAdmin = $window.sessionStorage.uRole === 'admin';
                 }
                 return response || $q.when(response);
             },
@@ -47,6 +48,20 @@
                     $location.path("/login");
                 }
 
+                return $q.reject(rejection);
+            }
+        };
+    });
+
+    app.factory('httpResponseInterceptor', function ($q, $window, $location) {
+        return {
+            responseError: function(rejection) {
+
+                if (rejection != null ) {
+                    console.log(rejection);
+                    var error_status = rejection.status === null  || rejection.status === 404|| rejection.status === 401;
+                    if ( error_status === true ) $location.path("/error");
+                }
                 return $q.reject(rejection);
             }
         };

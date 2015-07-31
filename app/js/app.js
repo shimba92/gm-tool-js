@@ -17,17 +17,21 @@ options.api.base_url = "http://localhost:9669";
         $routeProvider.
             when('/', {
                 templateUrl: './partials/main.content.html',
-                controller: 'IndexController',
+                controller: 'ContentController',
                 access: { requiredAuthentication: true }
             }).
             when('/login', {
                 templateUrl: './partials/auth.login-form.html',
-                controller: 'AuthController',
+                controller: 'AuthController'
             }).
             when('/admin', {
                 templateUrl: './partials/auth.admin-site.html',
                 controller: 'AdminController',
                 access: { requiredAuthentication: true }
+            }).
+            when('/error', {
+                templateUrl: './partials/error.html',
+                controller: ''
             }).
             otherwise({
                 redirectTo: '/'
@@ -37,6 +41,11 @@ options.api.base_url = "http://localhost:9669";
     app.config(function ($httpProvider) {
         $httpProvider.interceptors.push('TokenInterceptor');
     });
+
+    app.config(function ($httpProvider) {
+        $httpProvider.interceptors.push('httpResponseInterceptor');
+    });
+
 
     app.run(function($rootScope, $location, $window, AuthenticationService) {
         $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {

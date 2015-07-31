@@ -11,14 +11,13 @@ exports.verifyToken = function (req, res, next) {
 			console.log(err);
 			return res.send(500);
 		}
-
 		if (reply) {
+			console.log(reply)
 			res.send(401);
 		}
 		else {
 			next();
 		}
-
 	});
 };
 
@@ -28,6 +27,7 @@ exports.expireToken = function(headers) {
 	if (token != null) {
 		redisClient.set(token, { is_expired: true });
     	redisClient.expire(token, TOKEN_EXPIRATION_SEC);
+		console.log('set key ' + token );
 	}
 };
 
@@ -38,8 +38,7 @@ var getToken = function(headers) {
 
 		if (part.length == 2) {
 			var token = part[1];
-
-			return part[1];
+			return token;
 		}
 		else {
 			return null;
