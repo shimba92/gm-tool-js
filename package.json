@@ -1,7 +1,6 @@
 {
   "name": "application-name",
   "version": "0.0.1",
-
   "dependencies": {
     "bcryptjs": "~2.0.2",
     "body-parser": "^1.13.1",
@@ -19,5 +18,8 @@
     "response-time": "~2.0.1",
     "socket.io": "^1.3.6",
     "socket.io-client": "^1.3.6"
+  },
+  "devDependencies": {
+    "gulp-build": "^0.5.3"
   }
 }

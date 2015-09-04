@@ -12,8 +12,8 @@ var express = require('express'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
     config = require('./config/config'),
-    port = process.env.PORT || 9669,
-
+    portHttp = process.env.PORT || 9669,
+    path = require('path'),
 // Model
     User = require('./models/user');
 
@@ -33,7 +33,8 @@ mongoose.connection.once('open', function callback() {
 
 
 app.set('secretKey', config.secretKey);
-//app.use('/', express.static(__dirname + ''));
+console.log('path:' + path.join(__dirname, '../app'));
+app.use('/', express.static(path.join(__dirname, '../app')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));

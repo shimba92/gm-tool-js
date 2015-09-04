@@ -2,7 +2,7 @@
 
 var options = {};
 options.api = {};
-options.api.base_url = "http://localhost:9669";
+options.api.base_url = "http://localhost:9000";
 
 (function () {
     var app = angular.module('myApp', [
@@ -45,7 +45,6 @@ options.api.base_url = "http://localhost:9669";
     app.config(function ($httpProvider) {
         $httpProvider.interceptors.push('httpResponseInterceptor');
     });
-
 
     app.run(function($rootScope, $location, $window, AuthenticationService) {
         $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {

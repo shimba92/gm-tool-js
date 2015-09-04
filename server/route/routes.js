@@ -6,6 +6,7 @@ module.exports = function (app) {
     var socket = require('./sockets');
     var token_manager = require('../config/token_manager');
     var jwt = require('express-jwt');
+    var path = require('path');
 
     app.all('*', function(req, res, next) {
         res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
@@ -16,6 +17,10 @@ module.exports = function (app) {
         next();
     });
 
+    app.get('/', function(req, res) {
+        res.sendFile(path.resolve('app/index.html'));
+    });
+
     app.use('/api/authentication', user.authenticate);
     app.use('/api/logout', user.logout);
 
@@ -24,7 +29,6 @@ module.exports = function (app) {
     app.use('/api/add-user',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, user.addUser);
     app.use('/api/users',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, user.getUsers);
     app.use('/api/delete-user/:uid',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, user.deleteUser);
-
     app.use('/api/socket-connect/:ip',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, socket.setupConnection);
     app.use('/api/ip-list', token_manager.verifyToken, socket.ipList);
 }
