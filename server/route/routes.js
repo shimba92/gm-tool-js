@@ -3,13 +3,11 @@
  */
 module.exports = function (app) {
     var user = require('./users');
-    var socket = require('./sockets');
-    var token_manager = require('../config/token_manager');
     var jwt = require('express-jwt');
     var path = require('path');
 
     app.all('*', function(req, res, next) {
-        res.set('Access-Control-Allow-Origin', 'http://localhost:9000');
+        res.set('Access-Control-Allow-Origin', 'http://localhost:9669');
         res.set('Access-Control-Allow-Credentials', true);
         res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
         res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization');
@@ -26,9 +24,9 @@ module.exports = function (app) {
 
     app.use('/api/config-roles', user.roles);
 
-    app.use('/api/add-user',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, user.addUser);
-    app.use('/api/users',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, user.getUsers);
-    app.use('/api/delete-user/:uid',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, user.deleteUser);
-    app.use('/api/socket-connect/:ip',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, socket.setupConnection);
-    app.use('/api/ip-list', token_manager.verifyToken, socket.ipList);
+    app.use('/api/add-user',jwt({secret: app.get('secretKey')}), user.addUser);
+    app.use('/api/users',jwt({secret: app.get('secretKey')}), user.getUsers);
+    app.use('/api/delete-user/:uid',jwt({secret: app.get('secretKey')}), user.deleteUser);
+    // app.use('/api/socket-connect/:ip',jwt({secret: app.get('secretKey')}), token_manager.verifyToken, socket.setupConnection);
+    app.use('/api/ip-list', user.ipList);
 }

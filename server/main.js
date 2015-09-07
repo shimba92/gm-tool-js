@@ -12,7 +12,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
     config = require('./config/config'),
-    portHttp = process.env.PORT || 9669,
+    port = process.env.PORT || 9669,
     path = require('path'),
 // Model
     User = require('./models/user');

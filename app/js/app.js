@@ -2,7 +2,7 @@
 
 var options = {};
 options.api = {};
-options.api.base_url = "http://localhost:9000";
+options.api.base_url = "http://localhost:9669";
 
 (function () {
     var app = angular.module('myApp', [
