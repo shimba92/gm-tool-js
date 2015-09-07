@@ -29,7 +29,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">Server</span>
                         <select class="form-control" id="selectServerAddress" ng-model="curIP"
-                                ng-options="e.ip as e.ip for e in ipList" required>
+                                ng-options="e.host as e.host for e in ipList" required>
                         </select>
                             <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="setupConnection()">Connect!</button>
