@@ -15,7 +15,7 @@
 
         return auth;
     });
-
+    
     app.factory('TokenInterceptor', function ($q, $window, $location, AuthenticationService) {
         return {
             request: function (config) {

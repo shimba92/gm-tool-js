@@ -1,8 +1,7 @@
 var User = require('../models/user'),
     jwt = require('jsonwebtoken'),
     path = require('path'),
-    config = require('../config/config'),
-    tokenManager = require('../config/token_manager');
+    config = require('../config/config')
 
 // authentication
 exports.authenticate = function (req, res) {
@@ -25,7 +24,7 @@ exports.authenticate = function (req, res) {
                         var token = jwt.sign(
                             user._id,
                             config.secretKey,
-                            {expiresInMinutes: tokenManager.TOKEN_EXPIRATION}
+                            {expiresInMinutes: 1000}
                         );
                         console.log('Authentication success. Token = ' + token);
                         res.json({success: true, msg: 'success', token: token, user: user});
@@ -37,7 +36,6 @@ exports.authenticate = function (req, res) {
 }
 
 exports.logout = function(req, res) {
-    tokenManager.expireToken(req.headers);
     delete req.user;
     return res.send(200);
 }
@@ -102,4 +100,8 @@ exports.addUser = function (req, res) {
 
 exports.roles = function (req, res) {
     res.json(config.userRole);
+}
+
+exports.ipList = function (req, res) {
+    res.json(config.servers);
 }
