@@ -16,6 +16,7 @@ var express = require('express'),
     path = require('path'),
 // Model
     User = require('./models/user');
+    socket = require('./network/socket')
 
 console.log('All variables are declared.');
 

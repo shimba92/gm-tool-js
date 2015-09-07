@@ -9,8 +9,8 @@ module.exports = {
         ADMIN: {strValue: 'admin', intValue: 0},
         SUPER_USER_1: {strValue: 'super-user-1', intValue: 1}
     },
-    servers: [
-        {name: 'Socket Live', ip: '10.198.48.144:1101'},
-        {name: 'Socket Private', ip: '127.0.0.1:1101'}
-    ]
+    servers: {
+        live: {name: 'Socket Live', host: '49.213.81.39', port: 443},
+        private: {name: 'Socket Private', host: '127.0.0.1', port: 1101}
+    }
 };
