@@ -12,7 +12,8 @@ var paths = {
       'bower_components/**/bootstrap.min.css',
       'bower_components/**/jquery.min.js',
       'bower_components/**/jquery.js',
-      'bower_components/**/jquery.min.map'
+      'bower_components/**/jquery.min.map',
+      'bower_components/**/socket.io.js'
     ]
 };
 

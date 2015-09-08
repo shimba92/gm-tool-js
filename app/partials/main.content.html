@@ -1,4 +1,4 @@
-<div class="container" ng-controller="ContentController as contentCtrl">
+<div class="container" ng-controller="ActionController as actionCtrl">
 
   <div class="row">
     <div class="col-sm-3">
@@ -31,18 +31,30 @@
     <div class="col-sm-9">
       <div class="row">
         <div class="col-sm-8">
+          <div class="form-group">
+            <button type="button" class="btn btn-danger btn-lg">Submit</button>
+            <small>Description</small>
+          </div>
+          <hr>
+          <!--
           <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-              <span class="sr-only">Completed</span>
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+              <span class="sr-only">40% Complete (success)</span>
             </div>
           </div>
+          -->
         </div>
         <div class="col-sm-4">
-          <label for="textArea" class="col-lg-2 control-label">Textarea</label>
-          <div class="col-lg-10">
-            <textarea class="form-control" rows="3" id="textArea"></textarea>
-            <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+          <h4>
+            <span class="label label-success"> Log console </span>
+          </h4>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Auto scroll
+            </label>
           </div>
+
+          <textarea class="form-control" rows="20" col="8" id="textArea" style="resize: none;font-family:Courier New;font-size: 0.8em;" readonly>Courier New</textarea>
         </div>
 
         <!-- /.col-lg-6 -->

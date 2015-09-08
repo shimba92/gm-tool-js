@@ -17,7 +17,7 @@ options.api.base_url = "http://localhost:9669";
     $routeProvider.
     when('/', {
       templateUrl: './partials/main.content.html',
-      controller: 'ContentController',
+      controller: 'ActionController',
       access: {
         requiredAuthentication: true
       }

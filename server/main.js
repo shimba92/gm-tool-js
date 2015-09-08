@@ -7,16 +7,18 @@
 
 var express = require('express'),
   app = express(),
-
+  server = require('http').Server(app),
+  io = require('socket.io')(server),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
   morgan = require('morgan'),
   config = require('./config/config'),
   port = process.env.PORT || 9669,
   path = require('path'),
+  websocket = require('./network/websocket')
   // Model
   User = require('./models/user');
-  
+
 socket = require('./network/socket')
 
 console.log('All variables are declared.');
@@ -43,10 +45,11 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-// root
+// setup socket.io server
+io.on('connection', websocket);
 
 require('./route/routes')(app);
 
-require('http').createServer(app).listen(port, function() {
+server.listen(port, function() {
   console.log('HTTP server listening on port: %s, in %s mode', port, app.get('env'));
 });

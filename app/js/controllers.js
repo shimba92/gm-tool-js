@@ -6,13 +6,8 @@
 (function() {
   var app = angular.module('myApp.controllers', [])
 
-  app.controller('MainController', ['$scope', 'WebSocket', function($scope, socket) {
-    socket.on('init', function(data) {
-
-    });
-  }]);
-
-  app.controller('ContentController', function($scope, $http) {
+  app.controller('ActionController', ['$scope', '$http', 'WebSocket', function($scope, $http, socket) {
+    $scope.consoleLogs = {};
     $scope.ipList = {};
     $scope.curIP = '10.198.48.144:1101';
 
@@ -37,7 +32,48 @@
           console.log('Error: ' + data);
         });
     }
-  });
+
+    // on receive messages handler
+    socket.on('init', function(data) {
+      print_log(data);
+      console.log(data);
+    });
+
+    socket.on('action:log', function(data) {
+      print_log(data);
+    });
+
+    socket.on('action:info', function(data) {
+      parse_result(data);
+    });
+
+    // on request handler
+
+    $scope.doAction = function() {
+      if ($scope.request && $scope.request.cmdID) {
+        socket.send('action:request', {
+          request: $scope.request
+        });
+        print_log('Request' + request);
+      } else {
+        print_log('Request invalid!');
+      }
+    }
+
+    // private function
+
+    function print_log(data, breakLine) {
+      //$scope.consoleLogs.push(data);
+      if (breakLine) {
+        $scope.consoleLogs.push('---------------');
+      }
+    }
+
+    function parse_result(data) {
+      // implement custome vew
+      console.log(data);
+    }
+  }]);
 
   app.controller('UserController', ['$scope', 'AuthenticationService', function($scope, AuthenticationService) {
     $scope.authenService = AuthenticationService;
