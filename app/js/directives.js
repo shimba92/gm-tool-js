@@ -3,21 +3,20 @@
  */
 'use strict';
 
-(function () {
-    var app = angular.module('myApp.directives', []);
+(function() {
+  var app = angular.module('myApp.directives', []);
 
-    app.directive('navBar', function () {
-        return {
-            restrict: 'A',
-            templateUrl: './partials/main.nav-bar.html'
-        };
-    });
+  app.directive('navBar', function() {
+    return {
+      restrict: 'A',
+      templateUrl: './partials/main.nav-bar.html'
+    };
+  });
 
-    app.directive('sideMenu', function () {
-        return {
-            restrict: 'A',
-            templateUrl: './partials/main.side-menu.html'
-        };
-    });
+  app.directive('sideMenu', function() {
+    return {
+      restrict: 'A',
+      templateUrl: './partials/main.side-menu.html'
+    };
+  });
 })();
-

@@ -1,45 +1,52 @@
 <div class="container" ng-controller="ContentController as contentCtrl">
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-             style="width: 100%;">
-            <span class="sr-only">Completed</span>
-        </div>
+
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="input-group">
+        <span class="input-group-addon">Server</span>
+        <select class="form-control" id="selectServerAddress" ng-model="curIP" ng-options="e.host as e.host for e in ipList" required>
+        </select>
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-click="setupConnection()">Connect!</button>
+        </span>
+      </div>
+
     </div>
-    <div class="row">
-        <div class="col-sm-3">
-            <!-- <div side-menu></div> -->
-            <div class="list-group">
-                <a href="#/" class="list-group-item active">
+    <div class="col-sm-9">
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-sm-3">
+      <!-- <div side-menu></div> -->
+      <div class="list-group">
+        <a href="#/" class="list-group-item active">
                     Server command
                 </a>
-                <a href="#/" class="list-group-item">
+        <a href="#/" class="list-group-item">
                     User data command
                 </a>
-            </div>
-        </div>
-        <div class="col-sm-9">
-            <div class="page-header">
-                <h1>Example page header
-                    <small>Subtext for header</small>
-                </h1>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <span class="input-group-addon">Server</span>
-                        <select class="form-control" id="selectServerAddress" ng-model="curIP"
-                                ng-options="e.host as e.host for e in ipList" required>
-                        </select>
-                            <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="setupConnection()">Connect!</button>
-                        </span>
-
-                    </div>
-                    <!-- /input-group -->
-                </div>
-                <!-- /.col-lg-6 -->
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-sm-9">
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+              <span class="sr-only">Completed</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label for="textArea" class="col-lg-2 control-label">Textarea</label>
+          <div class="col-lg-10">
+            <textarea class="form-control" rows="3" id="textArea"></textarea>
+            <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+          </div>
+        </div>
+
+        <!-- /.col-lg-6 -->
+      </div>
+    </div>
+  </div>
 </div>

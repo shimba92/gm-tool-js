@@ -2,8 +2,7 @@ var makeRequestPacket = require('zocket/network/packet').makeRequestPacket;
 var cmd = require('./cmd');
 
 module.exports = {
-  requestLogin: function()
-  {
+  requestLogin: function() {
     return makeRequestPacket(cmd.LOGIN, function() {
       this.writeString('thacdu');
     });

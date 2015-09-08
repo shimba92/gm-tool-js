@@ -15,7 +15,7 @@
 
         return auth;
     });
-    
+
     app.factory('TokenInterceptor', function ($q, $window, $location, AuthenticationService) {
         return {
             request: function (config) {
@@ -77,5 +77,33 @@
                 return $http.get(options.api.base_url + '/api/logout');
             }
         }
+    });
+
+    app.factory('WebSocket', function($rootScope) {
+      var socket = io.connect();
+      return {
+        on: function(eventName, callback) {
+          socket.on(eventName, function() {
+            var args = arguments;
+            $rootScope.$apply(function() {
+              callback.apply(socket, args);
+            });
+          })
+        },
+        emit: function(eventName, data, callback) {
+          socket.emit(eventName, data, function(){
+            if ( callback ) {
+              callback.apply(socket, args);
+            }
+          });
+        },
+        send: function(eventName, data, callback) {
+          socket.send(eventName, data, function(){
+            if ( callback ) {
+              callback.apply(socket, args);
+            }
+          })
+        }
+      };
     });
 })();

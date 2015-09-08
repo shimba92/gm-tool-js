@@ -1,20 +1,15 @@
-<form name="loginForm"
-      class="form-horizontal col-sm-3 col-md-3 col-lg-3 col-sm-offset-5 col-md-offset-5 col-lg-offset-5 "
-      ng-controller="AuthController as auth"
-      ng-submit="loginForm.$valid && signIn()">
-    <legend>Login</legend>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" ng-model="authUser.email"
-               required>
-    </div>
-    <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
-               ng-model="authUser.password" required>
-    </div>
-    <div>Form valid - {{loginForm.$valid}}</div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-default">Submit</button>
-    </div>
+<form name="loginForm" class="form-horizontal col-sm-3 col-md-3 col-lg-3 col-sm-offset-5 col-md-offset-5 col-lg-offset-5 " ng-controller="AuthController as auth" ng-submit="loginForm.$valid && signIn()">
+  <legend>Login</legend>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" ng-model="authUser.email" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" ng-model="authUser.password" required>
+  </div>
+  <div>Form valid - {{loginForm.$valid}}</div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-default">Submit</button>
+  </div>
 </form>
