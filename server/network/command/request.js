@@ -6,5 +6,11 @@ module.exports = {
     return makeRequestPacket(cmd.LOGIN, function() {
       this.writeString('thacdu');
     });
+  },
+
+  requestGetAccountObject: function(uId) {
+    return makeRequestPacket(cmd.GET_ACC_OBJECT, function() {
+      this.writeInt(uId);
+    });
   }
 }
