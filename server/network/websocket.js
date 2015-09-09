@@ -6,7 +6,7 @@ function createWSResponse(uID, cmdID, result) {
   };
 }
 
-function parseWSRequest(uID, cmdID, result) {
+function parseWSRequest(data) {
   return {
     uID: data.uID,
     cmdID: data.cmdID,
@@ -35,7 +35,8 @@ module.exports = function(socket) {
   }));
 
   socket.on('action:request', function(data) {
-    socket.emit('action:log', createWSResponse(uID, data.cmdID, {
+	request = parseWSRequest(data);
+    socket.emit('action:log', createWSResponse(request.uID, request.cmdID, {
       success: true,
       msg: 'received request'
     }));
