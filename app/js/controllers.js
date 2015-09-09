@@ -7,7 +7,7 @@
   var app = angular.module('myApp.controllers', [])
 
   app.controller('ActionController', ['$scope', '$http', 'WebSocket', function($scope, $http, socket) {
-    $scope.consoleLogs = {};
+    $scope.consoleLogs = '';
     $scope.ipList = {};
     $scope.curIP = '10.198.48.144:1101';
 
@@ -35,12 +35,11 @@
 
     // on receive messages handler
     socket.on('init', function(data) {
-      print_log(data);
-      console.log(data);
+      print_log(data, true, true);
     });
 
     socket.on('action:log', function(data) {
-      print_log(data);
+      print_log(data, true);
     });
 
     socket.on('action:info', function(data) {
@@ -61,11 +60,19 @@
     }
 
     // private function
+    function responseFormatter(data, showAll) {
+      var l1 = 'Received: cmdID = ' + data.cmdID + ' - ' + data.result.success;
+      var l2 = 'Msg: ' + data.result.msg;
+      if ( showAll ) {
+        return l1 + '\n' + l2;
+      }
+      return l1;
+    }
 
-    function print_log(data, breakLine) {
-      //$scope.consoleLogs.push(data);
+    function print_log(data, breakLine, showAll) {
+      $scope.consoleLogs += responseFormatter(data, showAll);
       if (breakLine) {
-        $scope.consoleLogs.push('---------------');
+        $scope.consoleLogs += '\n---------------';
       }
     }
 
