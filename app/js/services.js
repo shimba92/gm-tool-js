@@ -98,7 +98,7 @@
           });
         },
         send: function(eventName, data, callback) {
-          socket.send(eventName, data, function(){
+          socket.emit(eventName, data, function(){
             if ( callback ) {
               callback.apply(socket, args);
             }

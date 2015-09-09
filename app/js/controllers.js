@@ -10,6 +10,12 @@
     $scope.consoleLogs = '';
     $scope.ipList = {};
     $scope.curIP = '10.198.48.144:1101';
+    $scope.uID = 'null'
+    $scope.request = {
+      uID: $scope.uID,
+      cmdID: 0,
+      paramList: []
+    }
 
     $http.get(options.api.base_url + '/api/ip-list')
       .success(function(data) {
@@ -35,11 +41,13 @@
 
     // on receive messages handler
     socket.on('init', function(data) {
+      $scope.uID = data.uID;
+      $scope.request.uID = data.uID;
       print_log(data, true, true);
     });
 
     socket.on('action:log', function(data) {
-      print_log(data, true);
+      print_log(data, true, true);
     });
 
     socket.on('action:info', function(data) {
@@ -49,22 +57,26 @@
     // on request handler
 
     $scope.doAction = function() {
-      if ($scope.request && $scope.request.cmdID) {
-        socket.send('action:request', {
-          request: $scope.request
-        });
-        print_log('Request' + request);
-      } else {
-        print_log('Request invalid!');
+      if ( $scope.request.cmdID  < 0) {
+        print_log("Request invalid");
+        return
       }
+
+      socket.send('action:request', {
+        request: $scope.request
+      });
+      print_log('Sent request cmdID = ' + $scope.request.cmdID, true);
     }
 
     // private function
     function responseFormatter(data, showAll) {
-      var l1 = 'Received: cmdID = ' + data.cmdID + ' - ' + data.result.success;
-      var l2 = 'Msg: ' + data.result.msg;
-      if ( showAll ) {
-        return l1 + '\n' + l2;
+      if (typeof data === 'string') {
+        return data + '\n';
+      }
+      var l1 = 'Received: cmdID = ' + data.cmdID + ' - ' + data.result.success + '\n';
+      var l2 = 'Msg: ' + data.result.msg + '\n';
+      if (showAll) {
+        return l1 + l2;
       }
       return l1;
     }
@@ -72,7 +84,7 @@
     function print_log(data, breakLine, showAll) {
       $scope.consoleLogs += responseFormatter(data, showAll);
       if (breakLine) {
-        $scope.consoleLogs += '\n---------------';
+        $scope.consoleLogs += '---------------\n';
       }
     }
 

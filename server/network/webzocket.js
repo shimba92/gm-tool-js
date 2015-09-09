@@ -35,7 +35,7 @@ module.exports = function(socket) {
   }));
 
   socket.on('action:request', function(data) {
-	request = parseWSRequest(data);
+    request = parseWSRequest(data.request);
     socket.emit('action:log', createWSResponse(request.uID, request.cmdID, {
       success: true,
       msg: 'received request'

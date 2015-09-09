@@ -15,7 +15,7 @@ var express = require('express'),
   config = require('./config/config'),
   port = process.env.PORT || 9669,
   path = require('path'),
-  websocket = require('./network/websocket')
+  webzocket = require('./network/webzocket')
   // Model
   User = require('./models/user');
 
@@ -46,7 +46,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // setup socket.io server
-io.on('connection', websocket);
+io.on('connection', webzocket);
 
 require('./route/routes')(app);
 
