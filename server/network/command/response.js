@@ -1,6 +1,6 @@
 var makeResponsePacket = require('zocket/network/packet').makeResponsePacket;
 
-var getResponsePacket: function(response, unpackFunc) {
+var getResponsePacket = function(response, unpackFunc) {
   response.uId = response.readInt();
   return makeResponsePacket(response, unpackFunc)
 }

@@ -1,3 +1,7 @@
+var zocket = require('./socket');
+var packet = require('./command/request');
+var globalVar = require('../globalVar');
+
 function createWSResponse(uID, cmdID, result) {
   return {
     uID: uID,
@@ -14,14 +18,25 @@ function parseWSRequest(data) {
   };
 }
 
+function dispatchMsgByUID(response) {
+  connection = globalVar.io.sockets.connected[socketid];
+  if (connection) {
+    msg = createWSResponse(response.uID, response.cmdId, response.json);
+    connection.emit('action:log', msg);
+    connection.emit('action:info', msg);
+  }
+}
+
 var CmdDefine = {
   CONNECT: 1,
-  DISCONNECT: 2
+  DISCONNECT: 2,
+  GET_USER_INFO:10
 }
 
 module.exports.CmdDefine = CmdDefine;
 module.exports.createWSResponse = createWSResponse;
 module.exports.parseWSRequest = parseWSRequest;
+module.exports.dispatchMsgByUID = dispatchMsgByUID;
 
 
 module.exports = function(socket) {
@@ -36,6 +51,15 @@ module.exports = function(socket) {
 
   socket.on('action:request', function(data) {
     request = parseWSRequest(data.request);
+
+    switch (request.cmdID) {
+      case CmdDefine.GET_USER_INFO:
+        zocket.send(packet.requestGetAccountObject());
+        break;
+      default:
+
+    }
+
     socket.emit('action:log', createWSResponse(request.uID, request.cmdID, {
       success: true,
       msg: 'received request'

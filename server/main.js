@@ -15,11 +15,13 @@ var express = require('express'),
   config = require('./config/config'),
   port = process.env.PORT || 9669,
   path = require('path'),
-  webzocket = require('./network/webzocket')
+  webzocket = require('./network/webzocket'),
   // Model
-  User = require('./models/user');
+  User = require('./models/user'),
+  globalVar = require('./globalVar');
 
-socket = require('./network/socket')
+socket = require('./network/socket');
+globalVar.io = io;
 
 console.log('All variables are declared.');
 
