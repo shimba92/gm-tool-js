@@ -4,6 +4,38 @@ var options = {};
 options.api = {};
 options.api.base_url = "http://localhost:9669";
 
+options.actions = [
+  {
+    name: 'Account info',
+    cmdID : 10,
+    paramList: [
+      {
+        id:'user-id',
+        label: 'User ID',
+        type: 'string'
+      }
+    ],
+    updateCmdID: 110
+  },
+  {
+    name: 'Event data',
+    cmdID : 11,
+    paramList: [
+      {
+        id:'user-id',
+        label: 'User ID',
+        type: 'string'
+      },
+      {
+        id:'event-id',
+        label: 'Event ID',
+        type: 'string'
+      }
+    ],
+    updateCmdID: 0
+  }
+];
+
 (function() {
   var app = angular.module('myApp', [
     'ngRoute',

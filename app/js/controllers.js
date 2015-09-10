@@ -11,6 +11,10 @@
     $scope.jsonResult = {};
     $scope.autoScroll = false;
     $scope.ipList = {};
+    $scope.currentAction = undefined;
+    $scope.actionDesciption = '';
+    $scope.actionList = options.actions;
+
     $scope.request = {
       uID: $scope.uID,
       cmdID: 10,
@@ -46,6 +50,7 @@
       $scope.uID = data.uID
       $scope.request.uID = data.uID;
       $scope.request.paramList = [];
+      $scope.selectAction(0);
       print_log(data, true, true);
     });
 
@@ -68,7 +73,25 @@
       socket.send('action:request', {
         request: $scope.request
       });
-      print_log('Sent request cmdID = ' + $scope.request.cmdID, true);
+
+      print_log('Sent request cmdID = ' + $scope.request.cmdID);
+      print_log(JSON.stringify($scope.request, undefined, 2), true);
+    }
+
+    //
+    $scope.clearAction = function() {
+      $scope.jsonResult = {};
+    }
+
+    $scope.selectAction = function(actionID) {
+      var curAction = $scope.actionList[actionID];
+      $scope.currentAction = curAction;
+      $scope.request.cmdID = curAction.cmdID;
+      $scope.request.paramList = [];
+    }
+
+    $scope.editParam = function(index, value) {
+      $scope.request.paramList[index] = value;
     }
 
     // private function
