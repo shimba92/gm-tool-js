@@ -8,6 +8,7 @@
 
   app.controller('ActionController', ['$scope', '$http', 'WebSocket', function($scope, $http, socket) {
     $scope.consoleLogs = '';
+    $scope.jsonResult = {};
     $scope.autoScroll = false;
     $scope.ipList = {};
     $scope.request = {
@@ -92,7 +93,12 @@
 
     function parse_result(data) {
       // implement custome vew
-      console.log(data);
+      if (typeof data === 'string') {
+        $scope.jsonResult = data;
+        return;
+      }
+      $scope.jsonResult = data.result.msg;
+      return;
     }
   }]);
 
