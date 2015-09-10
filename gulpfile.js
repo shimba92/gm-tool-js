@@ -15,7 +15,10 @@ var paths = {
       'bower_components/**/jquery.min.map',
       'bower_components/**/socket.io.js',
       'bower_components/**/angular-json-human.min.css',
-      'bower_components/**/angular-json-human.min.js'
+      'bower_components/**/angular-json-human.min.js',
+      'bower_components/**/lodash.min.js',
+      'bower_components/**/lodash.underscore.min.js',
+      'bower_components/**/lodash.compat.min.js'
     ]
 };
 
