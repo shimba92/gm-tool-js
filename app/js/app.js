@@ -7,6 +7,7 @@ options.api.base_url = "http://localhost:9669";
 (function() {
   var app = angular.module('myApp', [
     'ngRoute',
+    'yaru22.jsonHuman',
     'myApp.directives',
     'myApp.controllers',
     'myApp.filters',

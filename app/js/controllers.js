@@ -92,13 +92,17 @@
     }
 
     function parse_result(data) {
-      // implement custome vew
+      // implement vew
       if (typeof data === 'string') {
         $scope.jsonResult = data;
         return;
       }
-      $scope.jsonResult = data.result.msg;
+      $scope.jsonResult = prettify(data.result.msg);
       return;
+    }
+
+    function prettify(json) {
+      return JSON.stringify(JSON.parse(json), undefined, 2);
     }
   }]);
 
