@@ -8,8 +8,9 @@ module.exports = {
     });
   },
 
-  requestGetAccountObject: function(uId) {
+  requestGetAccountObject: function(wsUID, uId) {
     return makeRequestPacket(cmd.GET_ACC_OBJECT, function() {
+      this.writeString(wsUID);
       this.writeInt(uId);
     });
   }

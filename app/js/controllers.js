@@ -8,14 +8,15 @@
 
   app.controller('ActionController', ['$scope', '$http', 'WebSocket', function($scope, $http, socket) {
     $scope.consoleLogs = '';
+    $scope.autoScroll = false;
     $scope.ipList = {};
-    $scope.curIP = '10.198.48.144:1101';
-    $scope.uID = 'null'
     $scope.request = {
       uID: $scope.uID,
-      cmdID: 0,
+      cmdID: 10,
       paramList: []
-    }
+    };
+    $scope.curIP = '10.198.48.144:1101';
+    $scope.uID = 'null'
 
     $http.get(options.api.base_url + '/api/ip-list')
       .success(function(data) {
@@ -41,8 +42,9 @@
 
     // on receive messages handler
     socket.on('init', function(data) {
-      $scope.uID = data.uID;
+      $scope.uID = data.uID
       $scope.request.uID = data.uID;
+      $scope.request.paramList = [];
       print_log(data, true, true);
     });
 

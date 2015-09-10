@@ -37,7 +37,6 @@ mongoose.connection.once('open', function callback() {
   console.log('init user data ...')
 });
 
-
 app.set('secretKey', config.secretKey);
 console.log('path:' + path.join(__dirname, '../app'));
 app.use('/', express.static(path.join(__dirname, '../app')));

@@ -1,4 +1,5 @@
 var zocket = require('./socket');
+var zocketCmd = require('./command/cmd');
 var packet = require('./command/request');
 var globalVar = require('../globalVar');
 
@@ -19,29 +20,51 @@ function parseWSRequest(data) {
 }
 
 function dispatchMsgByUID(response) {
-  connection = globalVar.io.sockets.connected[socketid];
+  uID = response.uId;
+  connection = globalVar.io.sockets.connected[uID];
+
   if (connection) {
-    msg = createWSResponse(response.uID, response.cmdId, response.json);
+    stdCmd = getMapCmdID()[response.cmdId];
+
+    if ( stdCmd == undefined) {
+      console.log('- Missing mapping for CmdID = ' + response.cmdId);
+      return;
+    }
+
+    msg = createWSResponse(uID, stdCmd, {success: true, msg: response.json });
     connection.emit('action:log', msg);
     connection.emit('action:info', msg);
+  } else {
+    console.log('- Not exist WS UserID = ' + uID);
   }
+}
+
+function getMapCmdID() {
+  map = {};
+  for ( var key in zocketCmd ) {
+    if ( CmdDefine.hasOwnProperty(key) ) {
+      map[zocketCmd[key]] = CmdDefine[key];
+    }
+  }
+  return map;
 }
 
 var CmdDefine = {
   CONNECT: 1,
   DISCONNECT: 2,
-  GET_USER_INFO:10
+
+  GET_ACC_OBJECT:10
 }
 
 module.exports.CmdDefine = CmdDefine;
 module.exports.createWSResponse = createWSResponse;
 module.exports.parseWSRequest = parseWSRequest;
 module.exports.dispatchMsgByUID = dispatchMsgByUID;
+module.exports.getMapCmdID = getMapCmdID;
 
 
 module.exports = function(socket) {
   var uID = socket.id;
-
   console.log('User-' + uID + ' connected');
   // on connection
   socket.emit('init', createWSResponse(uID, CmdDefine.CONNECT, {
@@ -53,8 +76,8 @@ module.exports = function(socket) {
     request = parseWSRequest(data.request);
 
     switch (request.cmdID) {
-      case CmdDefine.GET_USER_INFO:
-        zocket.send(packet.requestGetAccountObject());
+      case CmdDefine.GET_ACC_OBJECT:
+        zocket.send(packet.requestGetAccountObject(uID, 10001));
         break;
       default:
 
