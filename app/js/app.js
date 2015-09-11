@@ -3,42 +3,49 @@
 var options = {};
 options.api = {};
 options.api.base_url = "http://localhost:9669";
-
-options.actions = [
-  {
-    name: 'Account info',
-    cmdID : 10,
-    paramList: [
-      {
-        id:'user-id',
-        label: 'User ID',
-        type: 'string'
-      }
-    ],
-    updateCmdID: 110
-  },
-  {
-    name: 'Event data',
-    cmdID : 11,
-    paramList: [
-      {
-        id:'user-id',
-        label: 'User ID',
-        type: 'string'
-      },
-      {
-        id:'event-id',
-        label: 'Event ID',
-        type: 'string'
-      }
-    ],
-    updateCmdID: 0
+// type : text, number, date
+options.actions = [{
+  name: 'Account info',
+  cmdID: 10,
+  paramList: [{
+    id: 'user-id',
+    label: 'User ID',
+    type: 'number',
+    init: -1
+  }],
+  attrUpdate: {
+    cmdID: 10010,
+    list: [{
+      name: 'gold',
+      type: 'number',
+      init: 0
+    }, {
+      name: 'username',
+      type: 'text',
+      init: 'abc'
+    }]
   }
-];
+}, {
+  name: 'Event data',
+  cmdID: 11,
+  paramList: [{
+    id: 'user-id',
+    label: 'User ID',
+    type: 'number',
+    init: -1
+  }, {
+    id: 'event-id',
+    label: 'Event ID',
+    type: 'string',
+    init: 'null'
+  }],
+  attrUpdate: undefined
+}];
 
 (function() {
   var app = angular.module('myApp', [
     'ngRoute',
+    'luegg.directives',
     'yaru22.jsonHuman',
     'myApp.directives',
     'myApp.controllers',

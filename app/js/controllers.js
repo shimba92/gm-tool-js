@@ -9,17 +9,16 @@
   app.controller('ActionController', ['$scope', '$http', 'WebSocket', function($scope, $http, socket) {
     $scope.consoleLogs = '';
     $scope.jsonResult = {};
-    $scope.autoScroll = false;
+    $scope.autoScroll = true;
     $scope.ipList = {};
     $scope.currentAction = undefined;
     $scope.actionDesciption = '';
     $scope.actionList = options.actions;
+    $scope.selectedAttrIndex = undefined;
 
-    $scope.request = {
-      uID: $scope.uID,
-      cmdID: 10,
-      paramList: []
-    };
+    $scope.request = undefined;
+    $scope.requestUpdate = undefined;
+
     $scope.curIP = '10.198.48.144:1101';
     $scope.uID = 'null'
 
@@ -48,8 +47,6 @@
     // on receive messages handler
     socket.on('init', function(data) {
       $scope.uID = data.uID
-      $scope.request.uID = data.uID;
-      $scope.request.paramList = [];
       $scope.selectAction(0);
       print_log(data, true, true);
     });
@@ -65,7 +62,7 @@
     // on request handler
 
     $scope.doAction = function() {
-      if ( $scope.request.cmdID  < 0) {
+      if ($scope.request.cmdID < 0) {
         print_log("Request invalid");
         return
       }
@@ -78,6 +75,19 @@
       print_log(JSON.stringify($scope.request, undefined, 2), true);
     }
 
+    $scope.updateAttr = function() {
+      if ($scope.request.cmdID < 0) {
+        print_log("Request invalid");
+        return
+      }
+      socket.send('action:request', {
+        request: $scope.requestUpdate
+      });
+
+      print_log('Sent request cmdID = ' + $scope.requestUpdate.cmdID);
+      print_log(JSON.stringify($scope.requestUpdate, undefined, 2), true);
+    }
+
     //
     $scope.clearAction = function() {
       $scope.jsonResult = {};
@@ -86,25 +96,61 @@
     $scope.selectAction = function(actionID) {
       var curAction = $scope.actionList[actionID];
       $scope.currentAction = curAction;
-      $scope.request.cmdID = curAction.cmdID;
-      $scope.request.paramList = [];
+      $scope.request = {
+        uID: $scope.uID,
+        cmdID: curAction.cmdID,
+        paramList: []
+      };
+
+      for (var k in curAction.paramList) {
+        editParam(k, curAction.paramList[k].init);
+      }
+
+      $scope.requestUpdate = undefined;
+      $scope.selectedAttrIndex = undefined;
+      if ($scope.currentAction.attrUpdate === undefined) {
+        $scope.selectedAttrIndex = undefined;
+      } else {
+        $scope.selectedAttrIndex = 0;
+        $scope.requestUpdate = {
+          uID: $scope.uID,
+          cmdID: $scope.currentAction.attrUpdate.cmdID,
+          paramList: []
+        };
+      }
+      $scope.changeAttrUpdate();
     }
 
-    $scope.editParam = function(index, value) {
+    $scope.changeAttrUpdate = function() {
+      if ($scope.selectedAttrIndex === undefined) {
+        return;
+      }
+
+      var selectedAttr = $scope.currentAction.attrUpdate.list[$scope.selectedAttrIndex];
+      $scope.requestUpdate.paramList[0] = selectedAttr.name;
+      $scope.requestUpdate.paramList[1] = selectedAttr.init;
+    }
+
+    $scope.clearLogs = function() {
+      $scope.consoleLogs = '';
+    }
+
+    function editParam (index, value) {
       $scope.request.paramList[index] = value;
     }
 
     // private function
     function responseFormatter(data, showAll) {
+      var l0 = new Date().toLocaleTimeString().toString() + '\n';
       if (typeof data === 'string') {
-        return data + '\n';
+        return l0 + data + '\n';
       }
       var l1 = 'Received: cmdID = ' + data.cmdID + ' - ' + data.result.success + '\n';
       var l2 = 'Msg: ' + data.result.msg + '\n';
       if (showAll) {
-        return l1 + l2;
+        return l0 + l1 + l2;
       }
-      return l1;
+      return l0 + l1;
     }
 
     function print_log(data, breakLine, showAll) {

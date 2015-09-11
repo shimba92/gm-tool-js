@@ -17,36 +17,71 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-2">
       <!-- <div side-menu></div> -->
       <div class="list-group">
-        <a href="" ng-repeat="action in actionList" class="list-group-item" ng-class="{ active : actionList.indexOf(currentAction) === $index}"  ng-click="selectAction($index)">
+        <a href="" ng-repeat="action in actionList" class="list-group-item" ng-class="{ active : actionList.indexOf(currentAction) === $index}" ng-click="selectAction($index)">
           {{action.name}}
         </a>
       </div>
     </div>
-    <div class="col-sm-9">
+    <div class="col-sm-10">
       <div class="row">
-        <div class="col-sm-8">
-          <div class="form-group">
-            <button type="button" class="btn btn-danger btn-lg" ng-click="doAction()">Submit</button>
-            <button type="button" class="btn btn-default btn-lg" ng-click="clearAction()">Clear result</button>
-            <small>{{actionDesciption}}</small>
-          </div>
+        <div class="col-sm-7">
           <!--
           input view
           -->
-          <hr>
           <form class="form-horizontal">
             <div class="form-group" ng-repeat="param in currentAction.paramList">
-                <label for="{{param.id}}" class="col-sm-2 control-label" >{{param.label}}</label>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control" id="{{param.id}}" placeholder="{{param.type}}" ng-blur="editParam($index, value)" ng-model="value">
-                </div>
+              <label for="{{param.id}}" class="col-sm-2 control-label">{{param.label}}</label>
+              <div class="col-sm-6">
+                <input type="{{param.type}}" class="form-control" id="{{param.id}}" placeholder="{{param.type}}"
+                ng-model="request.paramList[$index]">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-10 col-sm-offset-2">
+                <button type="button" class="btn btn-success" ng-click="doAction()">Submit</button>
+                <small>{{actionDesciption}}</small>
+              </div>
             </div>
           </form>
           <hr>
-          <div json-human="jsonResult"></div>
+          <form class="form-horizontal" ng-show="currentAction.attrUpdate.list">
+            <div class="form-group">
+              <label for="update-attr" class="col-sm-2 control-label">Attribute</label>
+              <div class="col-sm-6">
+                <select ng-model="selectedAttrIndex" ng-options="currentAction.attrUpdate.list.indexOf(selectedAttrIndex) as selectedAttrIndex.name for selectedAttrIndex in currentAction.attrUpdate.list"
+                ng-change="changeAttrUpdate()"
+                class="form-control"
+                id="update-attr"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="update-value" class="col-sm-2 control-label">Value</label>
+              <div class="col-sm-6">
+                <input type="{{selectedAttr.type}}"
+                ng-model="requestUpdate.paramList[1]"
+                class="form-control" id="update-value">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-10 col-sm-offset-2">
+                <button type="button" class="btn btn-danger" ng-click="updateAttr()">Set</button>
+              </div>
+            </div>
+            <hr>
+          </form>
+          <form class="form-horizontal">
+            <div class="form-group">
+              <div class="col-sm-10 col-sm-offset-2">
+                <button type="button" class="btn btn-default" ng-click="clearAction()">Clear result</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div json-human="jsonResult"></div>
+            </div>
+          </form>
           <!--
           <div class="progress">
             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
@@ -55,18 +90,27 @@
           </div>
           -->
         </div>
-        <div class="col-sm-4">
-          <p><b>User ID :</b><span class="label label-default">{{uID}}</span></p>
-          <h4>
-            <span class="label label-success"> Log console</span>
-          </h4>
+        <div class="col-sm-5">
+          <p><b>User ID :</b>
+            <span class="label label-default">{{uID}}</span>
+          </p>
+
           <div class="checkbox">
             <label>
-              <input type="checkbox"> Auto scroll
+              <input type="checkbox" ng-model="autoScroll"> Auto scroll
             </label>
           </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-default" ng-click="clearLogs()">Clear</button>
+          </div>
+          <div class="form-group">
+            <textarea class="form-control"
+            rows="20" col="8"
+            id="textArea"
+            style="resize: none;font-family:Courier New;font-size: 0.8em;"
 
-          <textarea class="form-control" rows="20" col="8" id="textArea" style="resize: none;font-family:Courier New;font-size: 0.8em;" readonly>{{consoleLogs}}</textarea>
+            readonly scroll-glue = "autoScroll">{{consoleLogs}}</textarea>
+          </div>
         </div>
 
         <!-- /.col-lg-6 -->
