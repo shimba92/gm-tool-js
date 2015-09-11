@@ -4,7 +4,7 @@
   "dependencies": {
     "bcryptjs": "~2.0.2",
     "body-parser": "^1.13.1",
-    "couchbase": "~2.0.9",
+    "cron": "~1.0.0",
     "debug": "~0.7.4",
     "express": "^4.13.0",
     "express-jwt": "^0.3.1",

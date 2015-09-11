@@ -27,7 +27,7 @@ console.log('All variables are declared.');
 
 // Configuration
 mongoose.set('debug', true);
-mongoose.connect(config.mongoLocalURI);
+mongoose.connect(config.mongoLabURI);
 mongoose.connection.on('error', function() {
   console.log('Mongoose connection error');
 });
