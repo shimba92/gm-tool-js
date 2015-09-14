@@ -1,4 +1,5 @@
 module.exports = {
-  "LOGIN": 1,
-  "GET_ACC_OBJECT": 32002
+  LOGIN: 1,
+  GET_ACC_OBJECT: 32002,
+  UPDATE_ACC_ATTRIBUTE: 32003
 }

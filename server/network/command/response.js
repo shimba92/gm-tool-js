@@ -6,7 +6,7 @@ var getResponsePacket = function(response, unpackFunc) {
 }
 
 module.exports = {
-  getAccountObjectResponse: function(response) {
+  getGeneralActionResponse: function(response) {
     return getResponsePacket(response, function() {
       this.json = this.readString();
     });

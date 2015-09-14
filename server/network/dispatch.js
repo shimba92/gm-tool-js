@@ -3,14 +3,13 @@ var packet = require('./command/response')
 var webzocket = require('./webzocket')
 
 function dispatch(response) {
-  switch (response.cmdId) {
-    case cmd.GET_ACC_OBJECT:
-      response = packet.getAccountObjectResponse(response);
-      break;
-    default:
-      console.log('[-] Need implement this cmd: ' + response.cmdId);
+  wsCmdID = webzocket.transformCmdID(response.cmdId);
+  if ( wsCmdID != undefined) {
+    response = packet.getGeneralActionResponse(response);
+    webzocket.dispatchMsgByUID(response);
+  } else {
+    console.log('[-] Need implement this cmd: ' + response.cmdId);
   }
-  webzocket.dispatchMsgByUID(response);
 }
 
 module.exports = dispatch;

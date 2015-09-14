@@ -8,10 +8,13 @@ module.exports = {
     });
   },
 
-  requestGetAccountObject: function(wsUID, uId) {
-    return makeRequestPacket(cmd.GET_ACC_OBJECT, function() {
+  requestGeneralAction: function(cmdID, wsUID, paramList) {
+    return makeRequestPacket(cmdID, function() {
       this.writeString(wsUID);
-      this.writeInt(uId);
-    });
+      this.writeInt(paramList.length);
+      for (var i in paramList) {
+        this.writeString(paramList[i]);
+      }
+    })
   }
 }
