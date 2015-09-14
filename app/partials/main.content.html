@@ -10,7 +10,6 @@
           <button class="btn btn-default" type="button" ng-click="setupConnection()">Connect!</button>
         </span>
       </div>
-
     </div>
     <div class="col-sm-9">
     </div>
@@ -20,7 +19,7 @@
     <div class="col-sm-2">
       <!-- <div side-menu></div> -->
       <div class="list-group">
-        <a href="" ng-repeat="action in actionList" class="list-group-item" ng-class="{ active : actionList.indexOf(currentAction) === $index}" ng-click="selectAction($index)">
+        <a href="" ng-repeat="action in actionConfigs" class="list-group-item" ng-class="{ active : actionConfigs.indexOf(currentAction) === $index}" ng-click="selectAction($index)">
           {{action.name}}
         </a>
       </div>
@@ -47,11 +46,11 @@
             </div>
           </form>
           <hr>
-          <form class="form-horizontal" ng-show="currentAction.attrUpdate.list">
+          <form class="form-horizontal" ng-show="currentAction.attrUpdate.attrList">
             <div class="form-group">
               <label for="update-attr" class="col-sm-2 control-label">Attribute</label>
               <div class="col-sm-6">
-                <select ng-model="selectedAttrIndex" ng-options="currentAction.attrUpdate.list.indexOf(selectedAttrIndex) as selectedAttrIndex.name for selectedAttrIndex in currentAction.attrUpdate.list"
+                <select ng-model="selectedAttrIndex" ng-options="currentAction.attrUpdate.attrList.indexOf(selectedAttrIndex) as selectedAttrIndex.name for selectedAttrIndex in currentAction.attrUpdate.attrList"
                 ng-change="changeAttrUpdate()"
                 class="form-control"
                 id="update-attr"/>

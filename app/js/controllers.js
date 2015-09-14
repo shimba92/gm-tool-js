@@ -8,19 +8,19 @@
 
   app.controller('ActionController', ['$scope', '$http', 'WebSocket', function($scope, $http, socket) {
     $scope.consoleLogs = '';
+    $scope.actionConfigs = {};
     $scope.jsonResult = {};
     $scope.autoScroll = true;
     $scope.ipList = {};
     $scope.currentAction = undefined;
     $scope.actionDesciption = '';
-    $scope.actionList = options.actions;
     $scope.selectedAttrIndex = undefined;
 
     $scope.request = undefined;
     $scope.requestUpdate = undefined;
 
     $scope.curIP = '10.198.48.144:1101';
-    $scope.uID = 'null'
+    $scope.uID = 'null';
 
     $http.get(options.api.base_url + '/api/ip-list')
       .success(function(data) {
@@ -32,6 +32,10 @@
         console.log('Status: ' + status);
         console.log('Error: ' + data);
       });
+
+    $http.get('../res/GmTool.json').success(function(data){
+      $scope.actionConfigs = data['ActionView'];
+    });
 
     $scope.setupConnection = function() {
       $http.get(options.api.base_url + '/api/socket-connect/' + $scope.curIP)
@@ -51,7 +55,7 @@
       print_log(data, true, true);
     });
 
-    socket.on('action:log', function(data) {
+    socket.on('log', function(data) {
       print_log(data, true, true);
     });
 
@@ -62,29 +66,31 @@
     // on request handler
 
     $scope.doAction = function() {
-      if ($scope.request.cmdID < 0) {
-        print_log("Request invalid");
+      if ($scope.request.actionID < 0) {
+        print_log("Action invalid");
         return
       }
 
       socket.send('action:request', {
-        request: $scope.request
+        actionID: $scope.request.actionID,
+        paramList: $scope.request.paramList
       });
 
-      print_log('Sent request cmdID = ' + $scope.request.cmdID);
+      print_log('Sent action actionID = ' + $scope.request.actionID);
       print_log(JSON.stringify($scope.request, undefined, 2), true);
     }
 
     $scope.updateAttr = function() {
-      if ($scope.request.cmdID < 0) {
-        print_log("Request invalid");
+      if ($scope.requestUpdate.actionID < 0) {
+        print_log("Update action invalid");
         return
       }
       socket.send('action:request', {
-        request: $scope.requestUpdate
+        actionID: $scope.requestUpdate.actionID,
+        paramList: $scope.requestUpdate.paramList
       });
 
-      print_log('Sent request cmdID = ' + $scope.requestUpdate.cmdID);
+      print_log('Sent action update = ' + $scope.requestUpdate.actionID);
       print_log(JSON.stringify($scope.requestUpdate, undefined, 2), true);
     }
 
@@ -93,12 +99,13 @@
       $scope.jsonResult = {};
     }
 
-    $scope.selectAction = function(actionID) {
-      var curAction = $scope.actionList[actionID];
+    $scope.selectAction = function(actionIndex) {
+      var curAction = $scope.actionConfigs[actionIndex];
       $scope.currentAction = curAction;
+      console.log(curAction);
       $scope.request = {
         uID: $scope.uID,
-        cmdID: curAction.cmdID,
+        actionID: curAction.actionID,
         paramList: []
       };
 
@@ -114,19 +121,19 @@
         $scope.selectedAttrIndex = 0;
         $scope.requestUpdate = {
           uID: $scope.uID,
-          cmdID: $scope.currentAction.attrUpdate.cmdID,
+          actionID: $scope.currentAction.attrUpdate.actionID,
           paramList: []
         };
       }
       $scope.changeAttrUpdate();
+      $scope.clearAction();
     }
 
     $scope.changeAttrUpdate = function() {
       if ($scope.selectedAttrIndex === undefined) {
         return;
       }
-
-      var selectedAttr = $scope.currentAction.attrUpdate.list[$scope.selectedAttrIndex];
+      var selectedAttr = $scope.currentAction.attrUpdate.attrList[$scope.selectedAttrIndex];
       $scope.requestUpdate.paramList[0] = selectedAttr.name;
       $scope.requestUpdate.paramList[1] = selectedAttr.init;
     }
@@ -145,7 +152,7 @@
       if (typeof data === 'string') {
         return l0 + data + '\n';
       }
-      var l1 = 'Received: cmdID = ' + data.cmdID + ' - ' + data.result.success + '\n';
+      var l1 = 'Received: cmdID = ' + data.cmdID + ' - extraInfo : ' + data.extraInfo + ' - ' + data.result.success + '\n';
       var l2 = 'Msg: ' + data.result.msg + '\n';
       if (showAll) {
         return l0 + l1 + l2;
@@ -171,6 +178,9 @@
     }
 
     function prettify(json) {
+      if (typeof json === 'string') {
+        return '';
+      }
       return JSON.stringify(JSON.parse(json), undefined, 2);
     }
   }]);

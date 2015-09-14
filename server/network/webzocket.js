@@ -11,14 +11,6 @@ function createWSResponse(uID, cmdID, result) {
   };
 };
 
-function parseWSRequest(data) {
-  return {
-    uID: data.uID,
-    cmdID: data.cmdID,
-    paramList: data.paramList
-  };
-};
-
 function dispatchMsgByUID(response) {
   uID = response.uId;
   connection = globalVar.io.sockets.connected[uID];
@@ -26,33 +18,44 @@ function dispatchMsgByUID(response) {
   if (connection) {
     wsCmd = transformCmdID(response.cmdId);
 
-    if ( wsCmd == undefined) {
+    if (wsCmd == undefined) {
       console.log('- Missing mapping for CmdID = ' + response.cmdId);
       return;
     }
 
-    msg = createWSResponse(uID, wsCmd, {success: true, msg: response.json });
-    connection.emit('action:log', msg);
-    connection.emit('action:info', msg);
+    msg = createWSResponse(uID, wsCmd, {
+      success: response.error === 0,
+      msg: response.json
+    });
+
+    switch (wsCmd) {
+      case CmdDefine.DO_GENERAL_ACTION:
+        msg.extraInfo = 'actionId = ' + response.actionID;
+        connection.emit('action:info', msg);
+        break;
+      default:
+        msg.extraInfo = 'No View';
+    }
+    connection.emit('log', msg);
   } else {
     console.log('- Not exist WS UserID = ' + uID);
   }
 };
 
-var transformCmdID = function (cmdID) {
+var transformCmdID = function(cmdID) {
   map = {};
-  for ( var key in zocketCmd ) {
-    if ( CmdDefine.hasOwnProperty(key) ) {
+  for (var key in zocketCmd) {
+    if (CmdDefine.hasOwnProperty(key)) {
       map[zocketCmd[key]] = CmdDefine[key];
     }
   }
   return map[cmdID];
 };
 
-var revertCmdID = function (cmdID) {
+var revertCmdID = function(cmdID) {
   map = {};
-  for ( var key in zocketCmd ) {
-    if ( CmdDefine.hasOwnProperty(key) ) {
+  for (var key in zocketCmd) {
+    if (CmdDefine.hasOwnProperty(key)) {
       map[CmdDefine[key]] = zocketCmd[key];
     }
   }
@@ -63,14 +66,16 @@ var CmdDefine = {
   CONNECT: 1,
   DISCONNECT: 2,
 
-  GET_ACC_OBJECT:10,
-  UPDATE_ACC_ATTRIBUTE:10010
+  DO_GENERAL_ACTION: 10
 };
+
+var ActionDefine = {
+  GET_USER_INFO: 1,
+  UPDATE_USER_INFO: 2
+}
 
 module.exports.CmdDefine = CmdDefine;
 module.exports.transformCmdID = transformCmdID;
-module.exports.createWSResponse = createWSResponse;
-module.exports.parseWSRequest = parseWSRequest;
 module.exports.dispatchMsgByUID = dispatchMsgByUID;
 
 module.exports = function(socket) {
@@ -83,28 +88,20 @@ module.exports = function(socket) {
   }));
 
   socket.on('action:request', function(data) {
-    request = parseWSRequest(data.request);
-    sCmdID = revertCmdID(request.cmdID);
-
-    if ( sCmdID === undefined ) {
-      socket.emit('action:log', createWSResponse(request.uID, request.cmdID, {
-        success: false,
-        msg: 'CmdID = ' + request.cmdID + 'undefined'
-      }));
+    paramList = data.paramList;
+    actionID = data.actionID;
+    if (actionID === undefined) {
+      socket.emit('log', 'action undefined');
       return;
+    } else {
+      zocket.send(packet.requestGeneralAction(uID, actionID, paramList));
+      socket.emit('log', 'received request');
     }
-
-    zocket.send(packet.requestGeneralAction(sCmdID, uID, request.paramList));
-
-    socket.emit('action:log', createWSResponse(request.uID, request.cmdID, {
-      success: true,
-      msg: 'received request'
-    }));
   });
 
   socket.on('disconnect', function() {
     console.log('User : ' + uID + ' disconnected');
-    socket.emit('action:log', createWSResponse(uID, CmdDefine.DISCONNECT, {
+    socket.emit('log', createWSResponse(uID, CmdDefine.DISCONNECT, {
       success: true,
       msg: 'User disconnect'
     }))

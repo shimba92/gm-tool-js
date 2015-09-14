@@ -8,12 +8,13 @@ module.exports = {
     });
   },
 
-  requestGeneralAction: function(cmdID, wsUID, paramList) {
-    return makeRequestPacket(cmdID, function() {
+  requestGeneralAction: function(wsUID, actionID, paramList) {
+    return makeRequestPacket(cmd.DO_GENERAL_ACTION, function() {
       this.writeString(wsUID);
+      this.writeInt(actionID);
       this.writeInt(paramList.length);
       for (var i in paramList) {
-        this.writeString(paramList[i]);
+        this.writeString(paramList[i]+'');
       }
     })
   }

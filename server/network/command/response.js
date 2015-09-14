@@ -8,6 +8,7 @@ var getResponsePacket = function(response, unpackFunc) {
 module.exports = {
   getGeneralActionResponse: function(response) {
     return getResponsePacket(response, function() {
+      this.actionID = this.readInt();
       this.json = this.readString();
     });
   }
