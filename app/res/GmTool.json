@@ -1,1 +1,33 @@
-{"ActionView":[{"name":"User info","actionID":1,"paramList":[{"id":"user-id","label":"User ID","type":"number","init":-1}],"attrUpdate":{"actionID":2,"attrList":[{"name":"gold","type":"number","init":0},{"name":"diamond","type":"number","init":0}]}},{"name":"Event info","actionID":10,"paramList":[{"id":"event-id","label":"Event ID","type":"text","init":"EV_404"}]}]}
+{
+  "ActionView": [{
+    "name": "User info",
+    "actionID": 1,
+    "paramList": [{
+      "id": "user-id",
+      "label": "User ID",
+      "type": "number",
+      "init": -1
+    }],
+    "attrUpdate": {
+      "actionID": 2,
+      "attrList": [{
+        "name": "gold",
+        "type": "number",
+        "init": 0
+      }, {
+        "name": "diamond",
+        "type": "number",
+        "init": 0
+      }]
+    }
+  }, {
+    "name": "Event info",
+    "actionID": 10,
+    "paramList": [{
+      "id": "event-id",
+      "label": "Event ID",
+      "type": "text",
+      "init": "EV_404"
+    }]
+  }]
+}

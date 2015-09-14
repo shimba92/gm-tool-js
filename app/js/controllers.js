@@ -85,9 +85,11 @@
         print_log("Update action invalid");
         return
       }
+      var headList = [];
+      headList[0] = $scope.request.paramList[0];
       socket.send('action:request', {
         actionID: $scope.requestUpdate.actionID,
-        paramList: $scope.requestUpdate.paramList
+        paramList: headList.concat($scope.requestUpdate.paramList)
       });
 
       print_log('Sent action update = ' + $scope.requestUpdate.actionID);
@@ -102,10 +104,9 @@
     $scope.selectAction = function(actionIndex) {
       var curAction = $scope.actionConfigs[actionIndex];
       $scope.currentAction = curAction;
-      console.log(curAction);
       $scope.request = {
         uID: $scope.uID,
-        actionID: curAction.actionID,
+        actionID: $scope.currentAction.actionID,
         paramList: []
       };
 
@@ -168,19 +169,15 @@
     }
 
     function parse_result(data) {
-      // implement vew
-      if (typeof data === 'string') {
-        $scope.jsonResult = data;
-        return;
+      if (data.result.success === true ) {
+        $scope.jsonResult = prettify(data.result.msg);
+      } else {
+        $scope.jsonResult = data.result;
       }
-      $scope.jsonResult = prettify(data.result.msg);
       return;
     }
 
     function prettify(json) {
-      if (typeof json === 'string') {
-        return '';
-      }
       return JSON.stringify(JSON.parse(json), undefined, 2);
     }
   }]);
